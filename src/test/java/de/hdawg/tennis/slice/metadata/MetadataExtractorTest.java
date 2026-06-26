@@ -195,4 +195,31 @@ class MetadataExtractorTest {
     assertThat(result.issues())
         .anyMatch(i -> i.severity() == Severity.WARNING && i.message().contains("Jg."));
   }
+
+  @Test
+  void invertedBirthYearRangeProducesWarning() {
+    // from (2014) > to (2008) triggers YearRange's IllegalArgumentException → caught in
+    // parseBirthYears
+    String text = "Stichtag 31.12.2025\nGültig ab 09.01.2026\nJg. 2014-2008\n";
+    MetadataExtractor.Result result = new MetadataExtractor().extract(text, Discipline.JUNIOREN);
+
+    assertThat(result.metadata().birthYears()).isNull();
+    assertThat(result.issues())
+        .anyMatch(
+            i ->
+                i.severity() == Severity.WARNING
+                    && i.message().contains("Jahrgangsbereich ungültig"));
+  }
+
+  @Test
+  void invalidStichtagDateProducesError() {
+    // Month 13 is invalid → DateTimeException caught in parseDate
+    String text = "Stichtag 31.13.2025\nGültig ab 09.01.2026\nDeutsche Rangliste bis 603 Punkte\n";
+    MetadataExtractor.Result result = new MetadataExtractor().extract(text, Discipline.HERREN);
+
+    assertThat(result.metadata().stichtag()).isNull();
+    assertThat(result.issues())
+        .anyMatch(
+            i -> i.severity() == Severity.ERROR && i.message().contains("Stichtag-Datum ungültig"));
+  }
 }

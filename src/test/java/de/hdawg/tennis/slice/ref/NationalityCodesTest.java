@@ -30,6 +30,14 @@ class NationalityCodesTest {
   }
 
   @Test
+  void knowsIocCodesFromRankingInfo() {
+    assertThat(NationalityCodes.isKnown("POR")).isTrue(); // Portugal
+    assertThat(NationalityCodes.isKnown("MAS")).isTrue(); // Malaysia
+    assertThat(NationalityCodes.isKnown("PHI")).isTrue(); // Philippines
+    assertThat(NationalityCodes.isKnown("URU")).isTrue(); // Uruguay
+  }
+
+  @Test
   void rejectsUnknownCode() {
     assertThat(NationalityCodes.isKnown("XXX")).isFalse();
   }

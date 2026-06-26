@@ -21,29 +21,20 @@ import java.util.Set;
 public final class NationalityCodes {
 
   /**
-   * IOC/DOSB nationality codes that differ from the ISO-3166-1 alpha-3 code and were observed
-   * empirically in the four fixture DTB ranking PDFs (scanned in LENIENT mode; see {@code
-   * NatCodeScanTest} history). All other codes occurring in the fixtures (e.g. AUT, ESP, TUR, UKR,
-   * SRB, SVK, ROU) happen to coincide with their ISO code and are covered by {@link #ISO_CODES}
-   * below.
-   *
-   * <p>Kept deliberately to the empirically-observed set: inventing extra "plausible" IOC codes
-   * would let unverified codes pass validation silently and weaken the fail-loud guarantee. A new,
-   * genuinely-unknown code must surface as an ERROR rather than be quietly accepted.
+   * IOC/DOSB nationality codes that differ from the ISO-3166-1 alpha-3 code. Synced from the flag
+   * SVG assets in the ranking-info project, which uses the same IOC code scheme as DTB ranking
+   * PDFs. Codes whose ISO and IOC forms happen to be identical (e.g. AUT, ESP, TUR) are covered by
+   * {@link #ISO_CODES} below and are not duplicated here.
    */
   private static final Set<String> IOC_CODES =
       Set.of(
-          "GER", // Germany (ISO: DEU) — canonical IOC-vs-ISO example
-          "SUI", // Switzerland (ISO: CHE)
-          "NED", // Netherlands (ISO: NLD)
-          "CRO", // Croatia (ISO: HRV)
-          "BUL", // Bulgaria (ISO: BGR)
-          "LAT", // Latvia (ISO: LVA)
-          "IRI", // Iran (ISO: IRN)
-          "RSA", // South Africa (ISO: ZAF)
-          "GRE", // Greece (ISO: GRC)
-          "SLO" // Slovenia (ISO: SVN)
-          );
+          "GER", "SUI", "NED", "CRO", "BUL", "LAT", "IRI", "RSA", "GRE", "SLO", "ALG", "ANG", "ANT",
+          "ARU", "ASA", "BAH", "BAN", "BAR", "BER", "BHU", "BIZ", "BOT", "BRU", "BUR", "CAM", "CAY",
+          "CGO", "CHA", "CHI", "CRC", "DEN", "ESA", "FIJ", "GAM", "GBS", "GEQ", "GRN", "GUA", "GUI",
+          "HAI", "HON", "INA", "ISV", "IVB", "KOS", "KSA", "KUW", "LBA", "LES", "MAD", "MAS", "MAW",
+          "MGL", "MNT", "MON", "MRI", "MTN", "MYA", "NCA", "NEP", "NGR", "NIG", "NIL", "OMA", "PAR",
+          "PHI", "PLE", "POR", "PUR", "SAM", "SER", "SEY", "SKN", "SOL", "SRI", "SUD", "TAN", "TGA",
+          "TKS", "TOG", "TPE", "UAE", "URU", "VAN", "VIE", "VIN", "ZAM", "ZIM");
 
   /** Legacy ISO-3166-1 alpha-3 codes, retained as harmless extras. */
   private static final Set<String> ISO_CODES =

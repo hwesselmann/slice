@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import de.hdawg.tennis.slice.api.Discipline;
 import de.hdawg.tennis.slice.api.RankingEntry;
+import de.hdawg.tennis.slice.api.Score;
 import de.hdawg.tennis.slice.api.Severity;
 import de.hdawg.tennis.slice.parse.Line;
 import de.hdawg.tennis.slice.pdf.Word;
@@ -59,6 +60,74 @@ class SliceProcessLineTest {
     List<Line> lines = List.of(row);
     assertThatThrownBy(() -> slice.processDataLines(lines, Discipline.HERREN, report))
         .isInstanceOf(IllegalStateException.class);
+  }
+
+  @Test
+  void lenientModeContinuesOnValidationError() {
+    // Row parses fine but association "ZZZ" is unknown → validation ERROR → skipped, not thrown
+    Line row = lineOf("1", "Surname", "Given", "12345678", "ZZZ", "TC", "Verein", "59,0");
+
+    Slice slice = Slice.builder().mode(ParseMode.LENIENT).build();
+    ParseReportBuilder report = new ParseReportBuilder();
+
+    List<RankingEntry> entries = slice.processDataLines(List.of(row), Discipline.HERREN, report);
+
+    assertThat(entries).isEmpty();
+    assertThat(report.build()).anyMatch(i -> i.severity() == Severity.ERROR);
+  }
+
+  @Test
+  void protectedRankingTokenBuildsCorrectScore() {
+    // Multi-token last name pushes "Erika" past the NAME_VORNAME_BOUNDARY_X threshold (185f)
+    Line row =
+        lineOf(
+            "5",
+            "Muster",
+            "von",
+            "der",
+            "Heiden",
+            "Erika",
+            "GER",
+            "12345678",
+            "TVN",
+            "TC",
+            "Verein",
+            "PR");
+
+    Slice slice = Slice.builder().mode(ParseMode.LENIENT).build();
+    ParseReportBuilder report = new ParseReportBuilder();
+
+    List<RankingEntry> entries = slice.processDataLines(List.of(row), Discipline.JUNIOREN, report);
+
+    assertThat(entries).hasSize(1);
+    assertThat(entries.get(0).score()).isInstanceOf(Score.ProtectedRanking.class);
+  }
+
+  @Test
+  void projectedTokenBuildsCorrectScore() {
+    Line row =
+        lineOf(
+            "10",
+            "Muster",
+            "von",
+            "der",
+            "Heiden",
+            "Erika",
+            "GER",
+            "12345678",
+            "TVN",
+            "TC",
+            "Verein",
+            "Einst.");
+
+    Slice slice = Slice.builder().mode(ParseMode.LENIENT).build();
+    ParseReportBuilder report = new ParseReportBuilder();
+
+    List<RankingEntry> entries =
+        slice.processDataLines(List.of(row), Discipline.JUNIORINNEN, report);
+
+    assertThat(entries).hasSize(1);
+    assertThat(entries.get(0).score()).isInstanceOf(Score.Projected.class);
   }
 
   private Line lineOf(String... tokens) {

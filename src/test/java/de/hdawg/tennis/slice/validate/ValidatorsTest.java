@@ -168,4 +168,11 @@ class ValidatorsTest {
     assertThat(validators.validateRow(einst, Discipline.JUNIORINNEN, 3, "raw"))
         .noneMatch(issue -> issue.severity() == Severity.ERROR);
   }
+
+  @Test
+  void validateGlobalReturnsEmptyList() {
+    List<ParseIssue> issues = new Validators().validateGlobal(List.of(), Discipline.HERREN);
+
+    assertThat(issues).isEmpty();
+  }
 }

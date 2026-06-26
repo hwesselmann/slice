@@ -1,6 +1,7 @@
 package de.hdawg.tennis.slice.parse;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import de.hdawg.tennis.slice.pdf.Word;
 import java.math.BigDecimal;
@@ -132,6 +133,16 @@ class RowParserTest {
     assertThat(row.firstName()).isEqualTo("Given");
     assertThat(row.firstName()).doesNotContain("XXX");
     assertThat(row.lastName()).doesNotContain("XXX");
+  }
+
+  @Test
+  void throwsWhenLineHasNoEightDigitId() {
+    // "1234567" is only 7 digits — indexOfId finds no match and throws, covering line() too
+    Line line = lineOf("1", "Surname", "Given", "GER", "1234567", "TVN", "TC Verein", "59,0");
+
+    assertThatThrownBy(() -> new RowParser().parse(line))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("no 8-digit id");
   }
 
   private Line lineOf(String... tokens) {
