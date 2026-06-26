@@ -1,6 +1,10 @@
 # Slice
 
 [![CI](https://github.com/hwesselmann/slice/actions/workflows/ci.yml/badge.svg)](https://github.com/hwesselmann/slice/actions/workflows/ci.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=hwesselmann_slice&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=hwesselmann_slice)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=hwesselmann_slice&metric=coverage)](https://sonarcloud.io/summary/new_code?id=hwesselmann_slice)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=hwesselmann_slice&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=hwesselmann_slice)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=hwesselmann_slice&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=hwesselmann_slice)
 
 Standalone Java library that parses official **DTB (Deutscher Tennis Bund) ranking PDFs** into typed, validated Java models.
 
