@@ -60,45 +60,82 @@ Run the test suite:
 ## Usage
 
 ```java
-import de.hdawg.slice.Slice;
-import de.hdawg.slice.api.ParseResult;
-import de.hdawg.slice.api.RankingList;
-import de.hdawg.slice.api.RankingEntry;
-import de.hdawg.slice.api.Score;
-import de.hdawg.slice.validate.ParseMode;
+import de.hdawg.tennis.slice.Slice;
+import api.de.hdawg.tennis.slice.ParseResult;
+import api.de.hdawg.tennis.slice.RankingList;
+import api.de.hdawg.tennis.slice.RankingEntry;
+import validate.de.hdawg.tennis.slice.ParseMode;
+
 import java.nio.file.Path;
 
 // LENIENT (default): unparseable rows are recorded as ParseIssues and skipped
 Slice slice = Slice.builder().build();
 
-// STRICT: throws IllegalStateException on the first ERROR-severity issue
-Slice strict = Slice.builder().mode(ParseMode.STRICT).build();
+        // STRICT: throws IllegalStateException on the first ERROR-severity issue
+        Slice strict = Slice.builder().mode(ParseMode.STRICT).build();
 
-ParseResult result = slice.parse(Path.of("DTB-Herren-Rangliste_20260101.pdf"));
+        ParseResult result = slice.parse(Path.of("DTB-Herren-Rangliste_20260101.pdf"));
 
-RankingList ranking = result.list();
-System.out.println(ranking.discipline());        // HERREN
-System.out.println(ranking.stichtag());          // 2025-12-31
-System.out.println(ranking.validFrom());         // 2026-01-09
-System.out.println(ranking.pointsThreshold());   // 603  (null for juniors)
-System.out.println(ranking.birthYears());        // null (YearRange for juniors)
+        RankingList ranking = result.list();
+System.out.
 
-for (RankingEntry entry : ranking.entries()) {
-    System.out.printf("%d  %-20s %-15s  %s  %s  %s  %s%n",
-        entry.rank(),
-        entry.lastName(),
-        entry.firstName(),
-        entry.dtbId(),
-        entry.association(),
-        entry.club(),
-        entry.score()
+        println(ranking.discipline());        // HERREN
+        System.out.
+
+        println(ranking.stichtag());          // 2025-12-31
+        System.out.
+
+        println(ranking.validFrom());         // 2026-01-09
+        System.out.
+
+        println(ranking.pointsThreshold());   // 603  (null for juniors)
+        System.out.
+
+        println(ranking.birthYears());        // null (YearRange for juniors)
+
+        for(
+        RankingEntry entry :ranking.
+
+        entries()){
+        System.out.
+
+        printf("%d  %-20s %-15s  %s  %s  %s  %s%n",
+               entry.rank(),
+        entry.
+
+        lastName(),
+        entry.
+
+        firstName(),
+        entry.
+
+        dtbId(),
+        entry.
+
+        association(),
+        entry.
+
+        club(),
+        entry.
+
+        score()
     );
-}
+            }
 
 // Review any issues (WARNING or ERROR)
-result.issues().forEach(issue ->
-    System.err.printf("[%s] page %d — %s%n", issue.severity(), issue.page(), issue.message())
-);
+            result.
+
+        issues().
+
+        forEach(issue ->
+        System.err.
+
+        printf("[%s] page %d — %s%n",issue.severity(),issue.
+
+        page(),issue.
+
+        message())
+        );
 ```
 
 ## API
